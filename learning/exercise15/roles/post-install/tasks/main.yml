@@ -1,0 +1,76 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for post-install
+- name: Install ntp agent on centos
+  yum:
+    name: "{{item}}"
+    state: present
+  when: ansible_distribution == "CentOS"
+  loop:
+    - chrony
+    - wget
+    - git
+    - zip
+    - unzip
+
+
+- name: Install ntp agent on ubuntu
+  apt:
+    name: "{{item}}"
+    state: present
+    update_cache: yes
+  when: ansible_distribution == "Ubuntu"
+  loop:
+    - ntp
+    - wget
+    - git
+    - zip
+    - unzip
+
+
+- name: Start service on centos
+  service:
+    name: chronyd
+    state: started
+    enabled: yes
+  when: ansible_distribution == "CentOS"
+
+- name: Start service on ubuntu
+  service:
+   name: ntp
+   state: started
+   enabled: yes
+  when: ansible_distribution == "Ubuntu"
+
+- name: Copy using inline content
+  ansible.builtin.copy:
+   content: "Found you big boy \ also i'm managing this server remotely dont touch anything"
+   dest: /etc/motd
+
+
+- name: Deploy ntp agent conf on centos
+  template:
+    src: chrony_centos.conf
+    dest: /etc/chrony.conf
+    backup: yes
+  when: ansible_distribution == "CentOs"
+
+- name: Deploy ntp agent conf on Ubuntu
+  template:
+    src: ntp.conf
+    dest: /etc/ntp.conf
+    backup: yes
+  when: ansible_distribution == "Ubuntu"
+    
+- name: Create a directory if it does not exist
+  ansible.builtin.file:
+       path: "{{mydir}}"
+       state: directory
+       mode: '0755'
+
+
+- name: Dump file
+  copy:
+       src: files/myfile.txt
+       dest: /tmp/myfile.txt
+

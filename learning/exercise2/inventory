@@ -1,0 +1,29 @@
+all:
+  hosts:
+    web01:
+      ansible_host: 172.31.81.197
+      ansible_user: ec2-user
+      ansible_ssh_private_key_file: clientkey.pem
+      ansible_python_interpreter: /usr/bin/python3.9
+    web02:
+      ansible_host: 172.31.95.47
+      ansible_user: ec2-user
+      ansible_ssh_private_key_file: clientkey.pem
+      ansible_python_interpreter: /usr/bin/python3.9
+    db01:
+      ansible_host: 172.31.95.65
+      ansible_user: ec2-user
+      ansible_ssh_private_key_file: clientkey.pem
+      ansible_python_interpreter: /usr/bin/python3.9
+  children:
+    webservers:
+      hosts:
+        web01:
+        web02:
+    dbservers:
+      hosts:
+        db01:
+    dc_oregon:
+      children:
+        webservers:
+        dbservers:   

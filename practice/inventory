@@ -1,0 +1,41 @@
+all:
+   hosts:
+    web01:
+     ansible_host: 172.31.81.197
+
+
+    web02:
+     ansible_host: 172.31.95.47
+   
+
+    db01:
+     ansible_host: 172.31.95.65
+   
+    web03:
+     ansible_host: 172.31.82.190
+     anible_python_interpreter: /usr/bin/python3
+
+   children:
+
+    amazon-linux:
+     hosts:
+      web01:
+      web02:
+      db01:
+     vars:
+      ansible_user: ec2-user
+      anible_python_interpreter: /usr/bin/python3.9
+
+    linux:   
+     hosts:
+      web03:
+     vars:
+      ansible_user: ubuntu
+      anible_python_interpreter: /usr/bin/python3
+    
+    servers:
+     children:
+      amazon-linux:
+      linux:
+     vars:
+      ansible_ssh_private_key_file: clientkey.pem 

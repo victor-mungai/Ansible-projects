@@ -1,0 +1,14 @@
+---
+
+- name: provisioning servers
+  hosts: all
+  become: yes 
+  roles:
+    - role: geerlingguy.tomcat6
+    - role: post-install
+      vars:
+       ntp1: 0.north-america.pool.ntp.org
+       ntp2: 1.north-america.pool.ntp.org
+       ntp0: 2.north-america.pool.ntp.org
+       ntp3: 3.north-america.pool.ntp.org
+
