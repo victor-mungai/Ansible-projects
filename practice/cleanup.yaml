@@ -1,0 +1,5 @@
+- name: clean up service
+  hosts: all
+  become: true
+  roles:
+    - roles

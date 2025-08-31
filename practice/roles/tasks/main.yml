@@ -1,0 +1,53 @@
+---
+   - name: Find old log files
+     ansible.builtin.find:
+        paths: "/var/log"
+        patterns: "*.log"
+        age: "30d"
+        age_stamp: mtime
+        recurse: yes
+     register: old_log_files
+
+
+   - name: Clean up old log files
+     ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: absent
+     loop: "{{ old_log_files.files }}"
+
+
+   - name: Find old Apache logs to delete
+     ansible.builtin.find:
+        paths: "/var/log/apache2"
+        patterns: "*.log.*"
+        age: "30d"
+        age_stamp: mtime
+     register: old_apache_logs
+
+   - name: Delete old Apache logs
+     ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: absent
+     loop: "{{ old_apache_logs.files }}"
+
+   - name: Clear all access logs
+     ansible.builtin.copy:
+        content: ""
+        dest: "/var/log/apache2/access.log"
+        force: true
+     notify: Reload Apache
+
+   - name: Prune all unused docker resources
+     community.docker.docker_prune:
+        containers: true
+        images: true
+        networks: true
+        volumes: true
+
+   - name: Clear global npm cache forcefully
+     ansible.builtin.command: npm cache clean --force
+
+   - name: Verify npm cache integrity
+     ansible.builtin.command: npm cache verify
+
+
