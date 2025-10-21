@@ -1,2 +1,3 @@
 *.pem
 .git-credentials
+frontend-key
