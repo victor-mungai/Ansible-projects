@@ -1,0 +1,12 @@
+---
+# handlers file for php
+    - name: Restart PHP-FPM
+      ansible.builtin.service:
+        name: php{{ ansible_facts.packages.php[0].version | regex_replace('\\..*', '') }}-fpm
+        state: restarted
+      ignore_errors: yes  
+
+    - name: Reload Nginx
+      ansible.builtin.service:
+        name: nginx
+        state: reloaded

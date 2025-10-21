@@ -1,0 +1,16 @@
+---
+plugin: amazon.aws.aws_ec2
+regions:
+  - "{{ lookup('env', 'AWS_REGION') | default('us-east-1') }}"
+filters:
+ "tag:Name": FrontendInstance
+ instance-state-name: running
+
+
+compose:
+ ansible_host: public_ip_address
+ ansible_python_interpreter: /usr/bin/python3
+
+keyed_groups:
+  - key: tags.OS
+    prefix: OS_

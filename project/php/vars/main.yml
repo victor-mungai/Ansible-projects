@@ -1,0 +1,12 @@
+---
+# vars file for php
+    web_root: "/var/www/html"
+    php_packages:
+      - php
+      - php-fpm
+      - php-mysql
+      - php-cli
+      - php-curl
+      - php-xml
+      - php-zip
+      - php-mbstring
