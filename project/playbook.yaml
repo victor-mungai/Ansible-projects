@@ -1,0 +1,5 @@
+- name: setting up our web server
+  become: yes
+  hosts: all
+  roles:
+    - common

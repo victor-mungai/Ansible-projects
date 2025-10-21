@@ -1,0 +1,12 @@
+---
+# vars file for common
+
+common_packages:
+      - vim
+      - wget
+      - curl
+      - git
+      - htop
+      - unzip
+
+timezone: "Africa/Nairobi"
