@@ -1,0 +1,4 @@
+---
+# vars file for nginx-server
+    server_name: "test.com"
+    web_root: "/var/www/html"

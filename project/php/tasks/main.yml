@@ -1,0 +1,27 @@
+---
+# tasks file for php
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: Install PHP and required extensions
+      ansible.builtin.apt:
+        name: "{{ php_packages }}"
+        state: present
+      notify: Restart PHP-FPM
+
+    - name: Deploy PHP test file
+      ansible.builtin.copy:
+        src: "../files/index.php"
+        dest: "{{ web_root }}/index.php"
+        owner: www-data
+        group: www-data
+        mode: '0644'
+      notify: Reload Nginx
+
+    - name: Ensure proper permissions for web root
+      ansible.builtin.file:
+        path: "{{ web_root }}"
+        owner: www-data
+        group: www-data
+        recurse: yes
